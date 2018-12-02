@@ -1,19 +1,27 @@
 package com.smart.jms.demo.ch02.chat;
 
+import com.smart.jndi.JndiFactory;
+
 import javax.jms.*;
-import javax.naming.InitialContext;
+import javax.naming.Context;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Properties;
 
 public class Chat implements MessageListener {
+
     private TopicSession pubSession;
     private TopicPublisher publisher;
     private TopicConnection connection;
     private String username;
 
+    private static Properties props;
+
     public Chat(String topicFactory, String topicName, String username) throws Exception {
-        // 使用 jidi.properties 文件获取一个 JNDI 连接
-        InitialContext context = new InitialContext();
+
+        // 使用 jndi.properties 文件获取一个 JNDI 连接
+        JndiFactory jndiFactory = new JndiFactory();
+        Context context = jndiFactory.getJndiContext();
 
         TopicConnectionFactory connectionFactory =
                 (TopicConnectionFactory) context.lookup(topicFactory);
@@ -57,7 +65,7 @@ public class Chat implements MessageListener {
 
     protected void writeMessage(String text) throws JMSException {
         TextMessage textMessage = pubSession.createTextMessage();
-        textMessage.setText(text);
+        textMessage.setText(String.format("%s说：%s", this.username, text));
         publisher.publish(textMessage);
     }
 
