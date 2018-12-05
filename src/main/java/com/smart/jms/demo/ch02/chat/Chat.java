@@ -57,7 +57,7 @@ public class Chat implements MessageListener {
     public void onMessage(Message message) {
         try {
             TextMessage textMessage = (TextMessage) message;
-            System.out.println(textMessage.getText());
+            System.out.println(String.format("%s说：%s", textMessage.getStringProperty("username"), textMessage.getText()));
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -65,7 +65,8 @@ public class Chat implements MessageListener {
 
     protected void writeMessage(String text) throws JMSException {
         TextMessage textMessage = pubSession.createTextMessage();
-        textMessage.setText(String.format("%s说：%s", this.username, text));
+        textMessage.setText(text);
+        textMessage.setStringProperty("username", this.username);
         publisher.publish(textMessage);
     }
 
