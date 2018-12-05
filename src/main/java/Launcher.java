@@ -1,5 +1,6 @@
 import com.smart.jndi.JndiFactory;
 
+import javax.jms.TopicConnectionFactory;
 import javax.naming.Context;
 import java.util.Hashtable;
 
@@ -17,5 +18,10 @@ public class Launcher {
         for (String key : env.keySet()) {
             System.out.println(String.format("key: %s, value: %s", key, env.get(key)));
         }
+
+        TopicConnectionFactory connectionFactory =
+                (TopicConnectionFactory) context.lookup("TopicCF");
+        System.out.println("获取到TopicConnectionFactory：" + (null != connectionFactory));
+
     }
 }
