@@ -21,7 +21,7 @@ public class QLender implements MessageListener {
             QueueConnectionFactory queueConnectionFactory = (QueueConnectionFactory) context.lookup(queuecf);
             queueConnection = queueConnectionFactory.createQueueConnection();
 
-            // 传教 JMS 会话
+            // 创建 JMS 会话
             queueSession = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
             // 查找申请队列
@@ -68,6 +68,7 @@ public class QLender implements MessageListener {
             queueSender.send(textMessage);
 
             System.out.println("\nWaiting for loan requests...");
+
         } catch (JMSException e) {
             e.printStackTrace();
         }
